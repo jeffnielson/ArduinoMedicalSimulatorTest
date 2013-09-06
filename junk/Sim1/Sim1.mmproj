@@ -1,0 +1,10 @@
+<mm_project serial_port="" board="Arduino Uno" programmer="" includePaths="" libPaths="" libs="" default="yes" useCodeAutomation="yes" linkPrintfVersion="1" serialPortSpeed="" >
+  <files>
+    <file name="Sim1_main.cpp" open="yes" />
+    <file name="sim1_main.h" open="yes" />
+  </files>
+  <extras>
+  </extras>
+  <externals>
+  </externals>
+</mm_project>
