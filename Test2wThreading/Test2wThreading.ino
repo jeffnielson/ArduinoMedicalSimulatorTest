@@ -16,6 +16,7 @@ char TimerExpired ( struct Timer * timer )
 void TimerStart ( struct Timer * timer ) 
 {
     timer->start = millis ( );
+    timer->timeout = timer->timeout;
 }
 
 //Display task running every 3000 milliseconds 
@@ -24,49 +25,50 @@ void TimerStart ( struct Timer * timer )
 //Timer timerKeyboard = { 0, 100 };
 
 //setup the timers that do the commands
-Timer tPulse;
-Timer tHeartSounds;
-Timer tLungSounds;
-Timer tLEye;
-Timer tREye;
-Timer tLCD;
-Timer tGeneric;
-Timer tSerial; 
-
+//Timer tPulse;
+//Timer tHeartSounds;
+//Timer tLungSounds;
+//Timer tLEye;
+//Timer tREye;
+//Timer tLCD;
+//Timer tGeneric;
+//Timer tSerial; 
+//
 //sets up the on board light to be the generic pulse
 int pBoardPulse = 13;
 boolean bBoardPulse = true;
 
 //(initial frequncy per minute)
-int iPulse = 60; 
-int iHeartSounds = 60;
-int iLungSounds = 16;
-int iLEye = 120;
-int iREye = 120;
-int iLCD = 120;
-int iGeneric = 6;
-int iSerial = 60;
+unsigned long  iPulse = 60; 
+unsigned long  iHeartSounds = 60;
+unsigned long  iLungSounds = 16;
+unsigned long  iLEye = 120;
+unsigned long  iREye = 120;
+unsigned long  iLCD = 120;
+unsigned long  iGeneric = 60;
+unsigned long  iSerial = 60;
 
-void makeTimers (void)
-{
+//timer is (lastTimeItWentOff, msLaterthatItShouldGoOff)
 Timer tPulse = { 0, 60000 / iPulse };
 Timer tHeartSounds = { 0, 60000 / iHeartSounds };
 Timer tLungSounds = { 0, 60000 / iLungSounds };
 Timer tLEye = { 0, 60000 / iLEye };
 Timer tREye = { 0, 60000 / iREye };
 Timer tLCD = { 0, 60000 / iLCD};
-Timer tGeneric = { 0, 60000 / iGeneric };
-Timer tSerial = {0, 60000 / iSerial };
-}
+Timer tGeneric = { 2, 60000/ iGeneric };
+Timer tSerial = {0, 60000.0 / iSerial };
 
 
 void setup (void) 
 {
-  makeTimers();
-  log("Timers Initialized");
+  
   setupGeneric();
   Serial.begin(9600);
-  Serial.println("Serial conection started, waiting for instructions...");
+  Serial.println("Serial conection started");
+  log("Timers Initialized");
+  //delay(1000);
+  //log(String(tGeneric.start));
+  //log(String(tGeneric.timeout));
 }
 
 
@@ -96,7 +98,7 @@ void loop (void)
     }
     if ( TimerExpired ( & tLungSounds ) )
     {
-        taskLungSounds ( ); 
+        taskLungSounds ( );
         TimerStart ( & tLungSounds );
     }
     if ( TimerExpired ( & tLEye ) )
@@ -121,40 +123,47 @@ void loop (void)
     }
     if ( TimerExpired ( & tGeneric ) )
     {
-        log("Starting Generic");
+        //log("Starting Generic");
         taskGeneric ( ); 
         TimerStart ( & tGeneric );
-        log(String(millis()));
-        log(String(tGeneric.start));
-        log(String(tGeneric.timeout));
+        //log(String(millis()));
+        //log(String(tGeneric.start));
+        //log(String(tGeneric.timeout));
     }
 }
     
 
 void taskPulse ( void ) 
 {
+  log("woosh");
 }
 
 void taskHeartSounds ( void ) 
 {
+  log("lub-dub");
 }
 
 void taskLungSounds ( void ) 
 {
+  log("ooh-tah");
 }
 
 void taskLEye ( void ) 
 {
+  //log("L eye change");
 }
 void taskREye ( void ) 
 {
+  //log("R eye change");
 }
 
 void taskLCD ( void ) 
 {
+  //log("updating LCD");
 }
 void taskSerial ( void ) 
 {
+  //log("looking for serial input");
 }
 void taskGeneric ( void ) 
 {
@@ -198,3 +207,4 @@ void lcdVitals() {
 void lcdLog(String s) {
   //sends a string to the lcd screen
 }
+
